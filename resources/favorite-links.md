@@ -1,0 +1,1 @@
+- [Deep Learning GPU Performance Analysis: Memory Bound vs Math Bound Operations](https://alexminnaar.com/2020/04/11/dl-gpu-perf-memory-vs-math.html)
