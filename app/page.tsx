@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -33,9 +32,9 @@ export default function Home() {
   return (
     <div className="max-w-3xl mx-auto">
       <section className="mb-20 text-center">
-        <h1 className="text-4xl font-bold mb-10 text-gray-800">Hi, I'm Lukas!</h1>
+        <h1 className="text-4xl font-bold mb-10 text-gray-800">Hi, I&apos;m Lukas!</h1>
         <p className="text-l text-gray-600 mb-10 max-w-xl mx-auto">
-           I like learning new things about ML, how to build interesting things, and how to make nice sounding music.
+           I like learning new things about ML, how to build interesting stuff, and how to make nice sounding music.
         </p>
         <div className="flex justify-center space-x-6">
           <a href="mailto:lukasgardberg@gmail.com" className="text-gray-600 hover:text-gray-900">
@@ -57,7 +56,10 @@ export default function Home() {
         </div>
       </section>
 
-      <BlogPostList posts={recentBlogPosts} showAllPostsLink={true} />
+      <div className="mt-20">
+        <h2 className="text-2xl font-bold mb-4 text-gray-300 ml-4">recent posts</h2>
+        <BlogPostList posts={recentBlogPosts} showAllPostsLink={true}/>
+      </div>
     </div>
   );
 }
