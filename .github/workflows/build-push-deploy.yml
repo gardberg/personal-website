@@ -70,6 +70,10 @@ jobs:
         run: |
           envsubst < k8s/deployment.yaml > k8s/deployment.yaml
 
+      - name: Replace NEW_IMAGE_TAG in deployment.yaml
+        run: |
+          sed -i 's/<NEW_IMAGE_TAG>/${{ github.sha }}/g' k8s/deployment.yaml
+
       - name: Deploy to GKE
         run: |
           kubectl apply -f k8s/

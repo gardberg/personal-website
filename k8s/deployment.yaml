@@ -18,6 +18,6 @@ spec:
         app: personal-website
     spec:
       containers:
-      # placeholder <GCP_PROJECT_ID> is substituted in deployment workflow
-      - image: europe-north1-docker.pkg.dev/<GCP_PROJECT_ID>/personal-repo/gardberg/personal-website:latest
+      # placeholders are substituted in deployment workflow
+      - image: europe-north1-docker.pkg.dev/<GCP_PROJECT_ID>/personal-repo/gardberg/personal-website:<NEW_IMAGE_TAG>
         name: personal-website
