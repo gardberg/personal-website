@@ -68,7 +68,7 @@ jobs:
 
       - name: Replace GCP_PROJECT_ID in deployment.yaml
         run: |
-          envsubst < k8s/deployment.yaml > k8s/deployment.yaml
+          sed -i 's/<GCP_PROJECT_ID>/${{ secrets.GCP_PROJECT_ID }}/g' k8s/deployment.yaml
 
       - name: Replace NEW_IMAGE_TAG in deployment.yaml
         run: |
