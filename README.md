@@ -3,3 +3,5 @@
 - [x] Fix syntax highlighting in blog posts
 - [x] Add a separate component for blog posts
 - [x] Make faviocon show
+- [ ] set up https
+- [ ] add custom hostname
