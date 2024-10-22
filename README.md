@@ -10,7 +10,12 @@ Code for my personal website gardberg.xyz
 - [x] set up CD
 - [x] set up https
 - [x] add custom hostname
+- [x] reduce image size
+  - [x] removed unecessary packages
+  - [x] multi stage build
+- [ ] fix pdf preview on chrome mobile
+  - a bit of a hassle, tried google docs hosting, slow
+- [x] add rolling update & healthcheck endpoint
 - [ ] move .mdx blog posts to external place
-- [ ] reduce image size
 - [ ] helm
 - [ ] sealed secrets
