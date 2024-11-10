@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: europe-north1-docker.pkg.dev
   IMAGE_NAME: ${{ github.repository }}
+  REPO_NAME: ${{ github.event.repository.name }}
   ARTIFACT_NAME: personal-repo
   CLUSTER_LOCATION: europe-north1
 
@@ -58,7 +59,7 @@ jobs:
           
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ env.IMAGE_NAME }} \
+          gcloud run deploy ${{ env.REPO_NAME }} \
             --image ${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             --region ${{ env.CLUSTER_LOCATION }} \
             --platform managed \
