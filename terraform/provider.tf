@@ -6,6 +6,11 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "gcs" {
+    bucket = "fleet-tractor-432310-d8-terraform-state"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {

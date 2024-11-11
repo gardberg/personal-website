@@ -62,16 +62,17 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
           
       - name: Terraform Init
-        run: terraform init
-        
-      - name: Update Cloud Run image in Terraform config
         run: |
-          sed -i 's|image = ".*"|image = "${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"|' main.tf
-        
+          terraform init \
+            -backend-config="bucket=fleet-tractor-432310-d8-terraform-state" \
+            -backend-config="prefix=terraform/state"
+    
       - name: Terraform Plan
         run: |
           terraform plan \
+            -var="image_repository=${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}" \
             -var="image_tag=${{ github.sha }}" \
+            -target=google_cloud_run_service.default \
             -out=tfplan
         
       - name: Terraform Apply

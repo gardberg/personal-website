@@ -34,7 +34,7 @@ export default function Home() {
       <section className="mb-20 text-center">
         <h1 className="text-4xl font-bold mb-10 text-gray-800">Hi, I&apos;m Lukas!</h1>
         <p className="text-l text-gray-600 mb-10 max-w-xl mx-auto">
-           I like learning new things about ML, how to build interesting stuff, and how to make nice sounding music.
+           I like learning new things about ML, building interesting stuff, and making nice sounding noise.
         </p>
         <div className="flex justify-center space-x-6">
           <a href="mailto:lukasgardberg@gmail.com" className="text-gray-600 hover:text-gray-900">

@@ -2,6 +2,10 @@
 
 Code for my personal website gardberg.xyz
 
+# Terraform
+
+Created bucket to store terraform state in under /terraform/bootstrap.
+
 ### TODO
 
 - [x] Fix syntax highlighting in blog posts
