@@ -43,24 +43,36 @@ jobs:
             ${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:latest
 
-  deploy:
+  terraform-deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
           
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          
-      - name: Deploy to Cloud Run
+      - name: Terraform Init
+        run: terraform init
+        
+      - name: Update Cloud Run image in Terraform config
         run: |
-          gcloud run deploy ${{ env.REPO_NAME }} \
-            --image ${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --region ${{ env.CLUSTER_LOCATION }} \
-            --platform managed \
-            --allow-unauthenticated
+          sed -i 's|image = ".*"|image = "${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"|' main.tf
+        
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var="image_tag=${{ github.sha }}" \
+            -out=tfplan
+        
+      - name: Terraform Apply
+        run: terraform apply tfplan
