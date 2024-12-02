@@ -75,7 +75,6 @@ jobs:
           terraform plan \
             -var="image_repository=${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}" \
             -var="image_tag=${{ github.sha }}" \
-            -target=google_cloud_run_service.default \
             -out=tfplan
         
       - name: Terraform Apply
