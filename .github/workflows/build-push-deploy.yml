@@ -66,7 +66,10 @@ jobs:
           terraform init \
             -backend-config="bucket=fleet-tractor-432310-d8-terraform-state" \
             -backend-config="prefix=terraform/state"
-    
+
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Plan
         run: |
           terraform plan \
