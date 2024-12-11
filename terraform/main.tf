@@ -87,3 +87,11 @@ resource "google_cloud_run_service" "default" {
     }
   }
 }
+
+# IAM policy to allow public access to Cloud Run service
+resource "google_cloud_run_service_iam_member" "public" {
+  location = google_cloud_run_service.default.location
+  service  = google_cloud_run_service.default.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
