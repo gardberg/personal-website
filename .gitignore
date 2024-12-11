@@ -61,3 +61,4 @@ override.tf.json
 **/.terraform/*
 *.tfstate
 *.tfstate.*
+.vscode

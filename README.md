@@ -23,3 +23,19 @@ Created bucket to store terraform state in under /terraform/bootstrap.
 - [ ] move .mdx blog posts to external place
 - [ ] helm
 - [ ] sealed secrets
+
+- [x] terraform validation
+- [x] apply on full config instead of only targeting the cloud run service
+- [ ] local forwarding rules instead of global
+  - [x] vpc network
+    - [x] subnet
+  - [x] proxy only subnet
+  - [ ] new regional ip
+  - [ ] serverless neg
+  - [ ] regional backend service
+  - [ ] add neg to backend service
+  - [ ] regional url map
+  - [ ] https/http proxies
+- [ ] update dns records with new ip
+- [ ] try out locally with terraform apply
+- [ ] run ci cd
