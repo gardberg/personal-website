@@ -96,6 +96,7 @@ jobs:
             -var-file="environments/${{ needs.determine-environment.outputs.environment }}.tfvars" \
             -var="image_repository=${{ env.REGISTRY }}/${{ needs.determine-environment.outputs.project_id }}/${{ env.ARTIFACT_NAME }}/${{ env.IMAGE_NAME }}" \
             -var="image_tag=latest" \
+            -var="project_id=${{ needs.determine-environment.outputs.project_id }}" \
             -out=tfplan
         
       - name: Terraform Apply
