@@ -1,3 +1,13 @@
+variable "project_id" {
+  description = "The GCP project ID"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment (dev/prod)"
+  type        = string
+}
+
 variable "image_tag" {
   description = "The tag for the Cloud Run container image"
   type        = string

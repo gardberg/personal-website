@@ -7,13 +7,14 @@ terraform {
     }
   }
 
+  # bucket configured during init
   backend "gcs" {
-    bucket = "fleet-tractor-432310-d8-terraform-state"
+    # bucket = "${var.project_id}-terraform-state"
     prefix = "terraform/state"
   }
 }
 
 provider "google" {
-  project = "fleet-tractor-432310-d8"
+  project = var.project_id
   region  = "europe-north1"
 }

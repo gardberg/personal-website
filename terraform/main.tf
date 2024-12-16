@@ -1,8 +1,20 @@
+
+# Reserved static IP
+resource "google_compute_global_address" "default" {
+  name = "personal-website"
+}
+
 # SSL Certificate
 resource "google_compute_managed_ssl_certificate" "default" {
-  name = "mcrt-e5c134e0-8c58-431e-b388-20725b51741f"
+  name = var.environment == "prod" ? "mcrt-e5c134e0-8c58-431e-b388-20725b51741f" : "personal-website-ssl-cert-${var.environment}"
   managed {
-    domains = ["gardberg.xyz", "www.gardberg.xyz"]
+    domains = var.environment == "dev" ? [
+      "dev.gardberg.xyz",
+      "www.dev.gardberg.xyz"
+    ] : [
+      "gardberg.xyz",
+      "www.gardberg.xyz"
+    ]
   }
 }
 
@@ -47,7 +59,7 @@ resource "google_compute_global_forwarding_rule" "https" {
   name       = "personal-website-fw-rule"
   target     = google_compute_target_https_proxy.default.id
   port_range = "443"
-  ip_address = "34.149.55.251"
+  ip_address = google_compute_global_address.default.address
   load_balancing_scheme = "EXTERNAL_MANAGED"
 }
 
@@ -55,7 +67,7 @@ resource "google_compute_global_forwarding_rule" "http" {
   name       = "personal-website-http-fw-rule"
   target     = google_compute_target_http_proxy.default.id
   port_range = "80"
-  ip_address = "34.149.55.251"
+  ip_address = google_compute_global_address.default.address
   load_balancing_scheme = "EXTERNAL_MANAGED"
 }
 

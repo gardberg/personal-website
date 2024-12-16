@@ -1,10 +1,16 @@
+variable "project_id" {
+  description = "The GCP project ID"
+  type        = string
+}
+
 provider "google" {
-  project = "fleet-tractor-432310-d8"
+  project = var.project_id
   region  = "europe-north1"
 }
 
+# bucket for storing remote terraform state using in cd
 resource "google_storage_bucket" "terraform_state" {
-  name          = "fleet-tractor-432310-d8-terraform-state"
+  name          = "${var.project_id}-terraform-state"
   location      = "europe-north1"
   force_destroy = false
   
