@@ -90,12 +90,6 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-        # handle a workflow that fails and leaves the lock
-      - name: Remove Terraform Lock (if exists)
-        continue-on-error: true
-        run: |
-          gsutil rm gs://${{ needs.determine-environment.outputs.project_id }}-terraform-state/terraform/state/default.tflock
-
       - name: Terraform Plan
         run: |
           terraform plan \
