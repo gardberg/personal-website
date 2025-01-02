@@ -21,5 +21,10 @@ Created bucket to store terraform state in under /terraform/bootstrap.
   - a bit of a hassle, tried google docs hosting, slow
 - [x] add rolling update & healthcheck endpoint
 - [ ] move .mdx blog posts to external place
-- [ ] helm
-- [ ] sealed secrets
+- [ ] regional
+  - [x] dev env
+  - [x] http
+  - [ ] https
+    - [ ] certificate
+    - [ ] update dns
+  - [ ] merge into main, make sure ci is working for both branches

@@ -1,6 +1,8 @@
 # Reserved static IP
 resource "google_compute_address" "default" {
   name = "personal-website"
+  region = "europe-north1"
+  network_tier = "STANDARD"
 }
 
 # VPC Network
@@ -57,6 +59,7 @@ resource "google_compute_region_backend_service" "default" {
   backend {
     group = google_compute_region_network_endpoint_group.serverless_neg.id
     capacity_scaler = 1.0
+    balancing_mode = "UTILIZATION"
   }
 }
 
@@ -84,7 +87,8 @@ resource "google_compute_forwarding_rule" "http" {
   target               = google_compute_region_target_http_proxy.default.id
   ip_address          = google_compute_address.default.address
   network              = google_compute_network.default.id
-  subnetwork           = google_compute_subnetwork.default.id
+  # subnetwork           = google_compute_subnetwork.default.id
+  ip_protocol = "TCP"
 }
 
 # Network Endpoint Group for Cloud Run
