@@ -14,7 +14,7 @@ variable "image_tag" {
 }
 
 variable "image_repository" {
-  description = "The repository path for the Cloud Run container image"
+  description = "The repository path for the Cloud Run container image registry"
   type        = string
   default     = "europe-north1-docker.pkg.dev/fleet-tractor-432310-d8/personal-repo/gardberg/personal-website"
 }

@@ -19,4 +19,7 @@ COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
 EXPOSE 3000
 
+ENV PORT=8080
+EXPOSE 8080
+
 CMD ["npm", "start"]

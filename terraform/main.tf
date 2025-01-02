@@ -1,7 +1,30 @@
-
 # Reserved static IP
-resource "google_compute_global_address" "default" {
+resource "google_compute_address" "default" {
   name = "personal-website"
+}
+
+# VPC Network
+resource "google_compute_network" "default" {
+  name                    = "lb-network-${var.environment}"
+  auto_create_subnetworks = false  # Custom mode VPC
+}
+
+# Subnet
+resource "google_compute_subnetwork" "default" {
+  name          = "lb-subnet-${var.environment}"
+  network       = google_compute_network.default.id
+  ip_cidr_range = "10.1.2.0/24"  # You can adjust this range
+  region        = "europe-north1"
+}
+
+# Proxy-only subnet
+resource "google_compute_subnetwork" "proxy_subnet" {
+  name          = "proxy-subnet-${var.environment}"
+  network       = google_compute_network.default.id
+  ip_cidr_range = "10.129.0.0/23"
+  region        = "europe-north1"
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  role          = "ACTIVE"
 }
 
 # SSL Certificate
@@ -16,17 +39,16 @@ resource "google_compute_managed_ssl_certificate" "default" {
       "www.gardberg.xyz"
     ]
   }
-}
 
-# URL Map
-resource "google_compute_url_map" "default" {
-  name            = "personal-website-url-map"
-  default_service = google_compute_backend_service.default.id
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Backend Service
-resource "google_compute_backend_service" "default" {
+resource "google_compute_region_backend_service" "default" {
   name        = "personal-website-backend-service"
+  region      = "europe-north1"
   protocol    = "HTTP"
   port_name   = "http"
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -34,7 +56,35 @@ resource "google_compute_backend_service" "default" {
 
   backend {
     group = google_compute_region_network_endpoint_group.serverless_neg.id
+    capacity_scaler = 1.0
   }
+}
+
+# Regional URL Map
+resource "google_compute_region_url_map" "default" {
+  name            = "personal-website-url-map"
+  region          = "europe-north1"
+  default_service = google_compute_region_backend_service.default.id
+}
+
+# Regional HTTP Proxy
+resource "google_compute_region_target_http_proxy" "default" {
+  name    = "personal-website-http-proxy"
+  region  = "europe-north1"
+  url_map = google_compute_region_url_map.default.id
+}
+
+# Regional Forwarding Rule
+resource "google_compute_forwarding_rule" "http" {
+  name                  = "website-http-rule-${var.environment}"
+  region                = "europe-north1"
+  port_range           = "80"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  network_tier         = "STANDARD"
+  target               = google_compute_region_target_http_proxy.default.id
+  ip_address          = google_compute_address.default.address
+  network              = google_compute_network.default.id
+  subnetwork           = google_compute_subnetwork.default.id
 }
 
 # Network Endpoint Group for Cloud Run
@@ -47,45 +97,6 @@ resource "google_compute_region_network_endpoint_group" "serverless_neg" {
   }
 }
 
-# HTTPS Proxy
-resource "google_compute_target_https_proxy" "default" {
-  name             = "personal-website-target-https-proxy"
-  url_map          = google_compute_url_map.default.id
-  ssl_certificates = [google_compute_managed_ssl_certificate.default.id]
-}
-
-# Global Forwarding Rules
-resource "google_compute_global_forwarding_rule" "https" {
-  name       = "personal-website-fw-rule"
-  target     = google_compute_target_https_proxy.default.id
-  port_range = "443"
-  ip_address = google_compute_global_address.default.address
-  load_balancing_scheme = "EXTERNAL_MANAGED"
-}
-
-resource "google_compute_global_forwarding_rule" "http" {
-  name       = "personal-website-http-fw-rule"
-  target     = google_compute_target_http_proxy.default.id
-  port_range = "80"
-  ip_address = google_compute_global_address.default.address
-  load_balancing_scheme = "EXTERNAL_MANAGED"
-}
-
-# HTTP Proxy (for redirect)
-resource "google_compute_target_http_proxy" "default" {
-  name    = "personal-website-target-http-proxy"
-  url_map = google_compute_url_map.http_redirect.id
-}
-
-# URL Map for HTTP to HTTPS redirect
-resource "google_compute_url_map" "http_redirect" {
-  name = "personal-website-http-redirect"
-  default_url_redirect {
-    https_redirect = true
-    strip_query   = false
-  }
-}
-
 # Cloud Run Service
 resource "google_cloud_run_service" "default" {
   name     = "personal-website"
@@ -95,6 +106,22 @@ resource "google_cloud_run_service" "default" {
     spec {
       containers {
         image = "${var.image_repository}:${var.image_tag}"
+        startup_probe {
+          http_get {
+            path = "/api/healthz"
+          }
+          initial_delay_seconds = 10
+          timeout_seconds = 30
+          period_seconds = 60
+          failure_threshold = 3
+        }
+        liveness_probe {
+          http_get {
+            path = "/api/healthz" 
+          }
+          timeout_seconds = 10
+          period_seconds = 30
+        }
       }
     }
   }
@@ -107,3 +134,4 @@ resource "google_cloud_run_service_iam_member" "public" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
