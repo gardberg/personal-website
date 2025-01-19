@@ -65,3 +65,7 @@ override.tf.json
 terraform/local.*.tfvars
 
 .vscode/
+
+# firebase
+.firebase/
+*.cache
