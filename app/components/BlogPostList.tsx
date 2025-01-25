@@ -11,9 +11,9 @@ export default function BlogPostList({ posts, showAllPostsLink = false }: BlogPo
     <section className="mb-12">
       <ul className="space-y-4">
         {posts.map((post) => (
-          <li key={post.slug}>
-            <Link href={`/blog/${post.slug}`} className="block bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition duration-150 ease-in-out">
-              <h2 className="text-gray-900 hover:text-blue-800 text-lg font-medium">
+          <li key={post.slug} className="textarea">
+            <Link href={`/blog/${post.slug}`} className="block p-4 transition duration-150 ease-in-out">
+              <h2 className="text-lg font-medium">
                 {post.title}
               </h2>
               <p className="text-xs text-gray-400 mt-1">
@@ -29,7 +29,7 @@ export default function BlogPostList({ posts, showAllPostsLink = false }: BlogPo
       </ul>
       {showAllPostsLink && (
         <div className="mt-4">
-          <Link href="/blog" className="text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out ml-4">
+          <Link href="/blog" className="text-gray-400 transition duration-150 ease-in-out ml-4">
             all posts
           </Link>
         </div>
