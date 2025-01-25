@@ -19,8 +19,11 @@ export default async function Resources() {
   const contentHtml = processedContent.toString();
 
   return (
-    <article className="prose lg:prose-4xl max-w-3xl mx-auto">
-      <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+    <article className="max-w-3xl mx-auto">
+      <div 
+        className="prose-ul:list-disc prose-ul:ml-4 prose-a:underline text-lg"
+        dangerouslySetInnerHTML={{ __html: contentHtml }} 
+      />
     </article>
   );
 }

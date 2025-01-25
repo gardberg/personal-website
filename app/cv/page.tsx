@@ -1,12 +1,10 @@
 export default function CV() {
   return (
-    <div className="w-full h-screen">
-      <object
-        data="/Lukas Gardberg CV 2024.pdf"
-        type="application/pdf"
-        className="w-full h-full"
-      >
-      </object>
+    <div className="w-full text-center">
+      <h1 className="text-3xl font-bold mb-6">Curriculum Vitae</h1>
+      <p className="mb-4">
+        Please contact me for my most up-to-date CV!
+      </p>
     </div>
   );
 }

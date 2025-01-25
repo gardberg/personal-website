@@ -28,7 +28,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   const { content, data } = matter(fileContents);
 
   return (
-    <article className="prose lg:prose-l mx-auto">
+    <article className="prose prose-invert prose-neutral mx-auto [&>*]:text-inherit prose-pre:bg-transparent">
       <h1>{data.title}</h1>
       <MDXRemote source={content} options={options} />
     </article>
