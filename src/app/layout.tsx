@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Ballet, Fondamento } from "next/font/google";
+import { Geist, Geist_Mono, Ballet, Fondamento, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,6 +24,13 @@ const fondamento = Fondamento({
   weight: "400",
 });
 
+const notoSerifJP = Noto_Serif_JP({
+  variable: "--font-noto-serif-jp",
+  display: "swap",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ballet.variable} ${fondamento.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ballet.variable} ${fondamento.variable} ${notoSerifJP.variable} antialiased`}
       >
         {children}
       </body>
