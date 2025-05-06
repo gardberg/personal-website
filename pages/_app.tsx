@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono, Ballet, Fondamento, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
+import type { AppProps } from 'next/app';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,18 +32,14 @@ const notoSerifJP = Noto_Serif_JP({
   weight: ["400", "500", "600", "700", "900"],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ballet.variable} ${fondamento.variable} ${notoSerifJP.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <div
+      className={`${geistSans.variable} ${geistMono.variable} ${ballet.variable} ${fondamento.variable} ${notoSerifJP.variable} antialiased`}
+    >
+      <Component {...pageProps} />
+    </div>
   );
 }
+
+export default MyApp; 

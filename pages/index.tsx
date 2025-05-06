@@ -1,6 +1,6 @@
 "use client";
 
-import { MetaballText } from "./components/MetaballText";
+import { MetaballText } from "../components/MetaballText";
 
 const text = "Gardberg"
 const margin = 100
@@ -22,9 +22,9 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex justify-start items-center pl-40">
+      <div className="flex justify-start items-center pl-80 mt-20">
         <div style={{ fontFamily: "serif" }}>
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-8 text-xl">
             <a href="https://github.com/gardberg">github</a>
             <a href="https://www.linkedin.com/in/lukas-gardberg/">linkedin</a>
             <a href="/about">about me</a>
@@ -34,4 +34,4 @@ export default function Home() {
 
     </div>
   );
-}
+} 
